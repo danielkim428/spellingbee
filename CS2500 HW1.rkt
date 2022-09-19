@@ -43,6 +43,7 @@
 (define LETTERS-1 (list "Y" "P" "T" "E" "N" "H" "O"))
 (define LETTERS-2 (list "A" "B" "C" "D" "F" "G" "I" "Y" "P" "T" "E" "N" "H" "O"))
 (define WORLD-1 (make-world LETTERS-1 "POT" '()))
+(define WORLD-2 (make-world LETTERS-2 "" '()))
 
 ;; play : World -> World
 ;; Uses big-bang to play a game of Spelling Bee
@@ -64,6 +65,17 @@
            0 -30
            (rectangle 400 500 "solid" "white"))))
 
+(check-expect (world->image WORLD-1)
+              (beside (overlay 
+                       (above (text (world-pw WORLD-1) 40 "black")
+                              (letters->image (world-l WORLD-1)))
+                       (rectangle 400 500 "solid" "white"))
+                      (overlay/align/offset
+                       "middle" "top"
+                       (prev-list->image (world-prev WORLD-1))
+                       0 -30
+                       (rectangle 400 500 "solid" "white"))))
+
 ;; letters->image : Letters -> Image
 ;; It consumes letters and produces an image of corresponding letter-status
 (define (letters->image alist)
@@ -79,6 +91,28 @@
                                        (* 65 (sin (* (/ (* 2 pi) 6) (length (rest alist)))))
                                        (* 130 (sin (* (/ (* 2 pi) 12) (length (rest alist))))))
                                    (letters->image (rest alist)))]))
+
+(check-expect (letters->image (list "A"))
+              (overlay (overlay (text "A" 20 "black")
+                                (circle 30 "solid" (color 245 218 73)))
+                       (square 350 "solid" "white")))
+
+(check-expect (letters->image (list "A" "B" "C"))
+              (overlay/offset (overlay (text "A" 20 "black") (circle 30 "solid" (color 230 230 230)))
+                              (* 65 (cos (* (/ (* 2 pi) 6) 2)))
+                              (* 65 (sin (* (/ (* 2 pi) 6) 2)))
+                              (overlay/offset (overlay (text "B" 20 "black") (circle 30 "solid" (color 230 230 230)))
+                                              (* 65 (cos (* (/ (* 2 pi) 6) 1)))
+                                              (* 65 (sin (* (/ (* 2 pi) 6) 1)))
+                                              (overlay (overlay (text "C" 20 "black")
+                                                                (circle 30 "solid" (color 245 218 73)))
+                                                       (square 350 "solid" "white")))))
+
+(check-expect (letters->image (list "A" "B" "C" "D" "E" "F" "G" "H"))
+              (overlay/offset (overlay (text "A" 20 "black") (circle 30 "solid" (color 230 230 230)))
+                              (* 130 (cos (* (/ (* 2 pi) 12) 7)))
+                              (* 130 (sin (* (/ (* 2 pi) 12) 7)))
+                              (letters->image (list "B" "C" "D" "E" "F" "G" "H"))))
 
 ;; prev-list->image : PreviousWords -> Image
 ;; Displays image of previous words
