@@ -88,10 +88,6 @@
     [(cons? prev) (above (text (first prev) 18 "black")
                          (prev-list->image (rest prev)))]))
 
-(check-expect (prev-list->image '()) (rectangle 1 1 "solid" "white"))
-(check-expect (prev-list->image (list "hi"))
-              (above (text "hi" 18 "black") (rectangle 1 1 "solid" "white")))
-
 ;; key-pressed : World KeyEvent -> World
 ;; Responds to key press to update partial word according to letter availability;
 ;; Pressing [enter] adds the partial word to the previous word list and clears the word.
