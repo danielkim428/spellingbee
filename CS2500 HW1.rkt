@@ -29,6 +29,7 @@
     [(cons? prev) (... (first prev) ... (previous-words-template (rest prev)) ...)]))
 
 (define-struct world [l pw prev])
+
 ;; A World is a (make-world Letters String PreviousWords)
 ;; A (make-world [l pw prev]) represents a World with available
 ;; letters, the partial word the user has entered, and the
