@@ -1,0 +1,302 @@
+;; The first three lines of this file were inserted by DrRacket. They record metadata
+;; about the language level of this file in a form that our tools can easily process.
+#reader(lib "htdp-intermediate-reader.ss" "lang")((modname |Homework 0|) (read-case-sensitive #t) (teachpacks ()) (htdp-settings #(#t constructor repeating-decimal #f #t none #f () #f)))
+(require 2htdp/image)
+
+;; Question 1 ----------
+
+;; concat-longer-first : String String -> String
+;; Consumes two strings and produces a single string that concatenates them, with a space between them
+;; The first string in the result is the longer of the two.
+(define (concat-longer-first x y)
+  (cond
+    [(>= (string-length x) (string-length y)) (string-append x " " y)]
+    [else (string-append y " " x)]))
+
+(check-expect (concat-longer-first "Apple" "Tree") "Apple Tree")
+(check-expect (concat-longer-first "Log" "Tree") "Tree Log")
+(check-expect (concat-longer-first "Cute" "Tree") "Cute Tree")
+
+;; Question 2 ----------
+
+;; A CanadianTrainStop is one of:
+;; - "Vancouver"
+;; - "Kamloops"
+;; - "Jasper"
+;; - "Edmonton"
+;; - "Saskatoon"
+;; - "Winnipeg"
+;; - "Sious Lookout"
+;; - "Sudbury Jct."
+;; - "Toronto"
+;; and reprents the Train Stops in The Candian rail.
+(define VANCOUVER "Vancouver")
+(define KAMLOOPS "Kamloops")
+(define JASPER "Jasper")
+(define EDMONTON "Edmonton")
+(define SASKATOON "Saskatoon")
+(define WINNIPEG "Winnipeg")
+(define SIOUX_LOOKOUT "Sioux Lookout")
+(define SUDBURY_JCT "Sudbury Jct.")
+(define TORONTO "Toronto")
+
+;; canadian-train-stop-template: String -> ?
+#|
+(define (canadian-train-stop-template CanadianTrainStop)
+  (cond
+    [(string=? CanadianTrainStop VANCOUVER) ...]
+    [(string=? CanadianTrainStop KAMLOOPS) ...]
+    [(string=? CanadianTrainStop JASPER) ...]
+    [(string=? CanadianTrainStop EDMONTON) ...]
+    [(string=? CanadianTrainStop SASKATOON) ...]
+    [(string=? CanadianTrainStop WINNIPEG) ...]
+    [(string=? CanadianTrainStop SIOUX_LOOKOUT) ...]
+    [(string=? CanadianTrainStop SUDBURY_JCT) ...]
+    [(string=? CanadianTrainStop TORONTO) ...]))
+|#
+
+;; A Province is one of:
+;; - "Alberta"
+;; - "British Columbia"
+;; - "Saskatchewan"
+;; - "Manitoba"
+;; - "Ontario"
+;; and reprents provinces that The Canadian rail passes.
+(define ALBERTA "Alberta")
+(define BC "British Columbia")
+(define SASKATCHEWAN "Saskatchewan")
+(define MANITOBA "Manitoba")
+(define ONTARIO "Ontario")
+
+;; province: CanadianTrainStop -> Province
+;; It consumes the CandianTrainStop and outputs the province in which the train stop is in
+(define (province CanadianTrainStop)
+  (cond
+    [(string=? CanadianTrainStop VANCOUVER) BC]
+    [(string=? CanadianTrainStop KAMLOOPS) BC]
+    [(string=? CanadianTrainStop JASPER) ALBERTA]
+    [(string=? CanadianTrainStop EDMONTON) ALBERTA]
+    [(string=? CanadianTrainStop SASKATOON) SASKATCHEWAN]
+    [(string=? CanadianTrainStop WINNIPEG) MANITOBA]
+    [(string=? CanadianTrainStop SIOUX_LOOKOUT) ONTARIO]
+    [(string=? CanadianTrainStop SUDBURY_JCT) ONTARIO]
+    [(string=? CanadianTrainStop TORONTO) ONTARIO]))
+
+(check-expect (province VANCOUVER) BC)
+(check-expect (province KAMLOOPS) BC)
+(check-expect (province JASPER) ALBERTA)
+(check-expect (province EDMONTON) ALBERTA)
+(check-expect (province SASKATOON) SASKATCHEWAN)
+(check-expect (province WINNIPEG) MANITOBA)
+(check-expect (province SIOUX_LOOKOUT) ONTARIO)
+(check-expect (province SUDBURY_JCT) ONTARIO)
+(check-expect (province TORONTO) ONTARIO)
+
+;; can-transfer? CanadianTrainStop -> Boolean
+;; It consumes CanadianTrainStop and outputs
+;; whether this stop is transferable to another line
+(define (can-transfer? CanadianTrainStop)
+  (cond
+    [(string=? CanadianTrainStop JASPER) #true]
+    [(string=? CanadianTrainStop WINNIPEG) #true]
+    [(string=? CanadianTrainStop TORONTO) #true]
+    [else #false]))
+
+(check-expect (can-transfer? VANCOUVER) #false)
+(check-expect (can-transfer? KAMLOOPS) #false)
+(check-expect (can-transfer? JASPER) #true)
+(check-expect (can-transfer? EDMONTON) #false)
+(check-expect (can-transfer? SASKATOON) #false)
+(check-expect (can-transfer? WINNIPEG) #true)
+(check-expect (can-transfer? SIOUX_LOOKOUT) #false)
+(check-expect (can-transfer? SUDBURY_JCT) #false)
+(check-expect (can-transfer? TORONTO) #true)
+
+;; Question 3 ----------
+
+;; A CompassDirection is one of:
+;; - "North"
+;; - "South"
+;; - "East"
+;; - "West"
+;; - "Northeast"
+;; - "Northwest"
+;; - "Southeast"
+;; - "Southwest"
+;; and represents cardinal or inter-cardinal direction that appeasrs on a compass rose
+(define N "North")
+(define S "South")
+(define E "East")
+(define W "West")
+(define NE "Northeast")
+(define NW "Northwest")
+(define SE "Southeast")
+(define SW "Southwest")
+
+
+;; CompassDirection-template: String -> ?
+#|
+(define (CompassDirection-template CompassDirection)
+  (cond
+    [(string=? CompassDirection N) ...]
+    [(string=? CompassDirection S) ...]
+    [(string=? CompassDirection E) ...]
+    [(string=? CompassDirection W) ...]
+    [(string=? CompassDirection NE) ...]
+    [(string=? CompassDirection NW) ...]
+    [(string=? CompassDirection SE) ...]
+    [(string=? CompassDirection SW) ...]))
+|#
+
+;; cardinal?: CompassDirection -> Boolean
+;; Consumes CompassDirection and outputs whether CompassDirections
+;; is a cardinal direction or intercardinal direction
+(define (cardinal? CompassDirection)
+  (cond
+    [(string=? CompassDirection N) #true]
+    [(string=? CompassDirection S) #true]
+    [(string=? CompassDirection E) #true]
+    [(string=? CompassDirection W) #true]
+    [(string=? CompassDirection NE) #false]
+    [(string=? CompassDirection NW) #false]
+    [(string=? CompassDirection SE) #false]
+    [(string=? CompassDirection SW) #false]))
+
+(check-expect (cardinal? N) #true)
+(check-expect (cardinal? W) #true)
+(check-expect (cardinal? E) #true)
+(check-expect (cardinal? S) #true)
+(check-expect (cardinal? NE) #false)
+(check-expect (cardinal? NW) #false)
+(check-expect (cardinal? SE) #false)
+(check-expect (cardinal? SW) #false)
+
+;; opposite: CompassDirection -> CompassDirection
+;; Consumes a CompassDirection and outputs its opposite CompassDirection
+(define (opposite CompassDirection)
+  (cond
+    [(string=? CompassDirection N) S]
+    [(string=? CompassDirection S) N]
+    [(string=? CompassDirection E) W]
+    [(string=? CompassDirection W) E]
+    [(string=? CompassDirection NE) SW]
+    [(string=? CompassDirection NW) SE]
+    [(string=? CompassDirection SE) NW]
+    [(string=? CompassDirection SW) NE]))
+
+(check-expect (opposite N) S)
+(check-expect (opposite S) N)
+(check-expect (opposite E) W)
+(check-expect (opposite W) E)
+(check-expect (opposite NE) SW)
+(check-expect (opposite NW) SE)
+(check-expect (opposite SE) NW)
+(check-expect (opposite SW) NE)
+
+;; Question 4 ----------
+
+;; A Movie is a (make-Movie String Number String)
+;; A (make-Movie [title tomatometer mpaa]) represents a movie with
+;; the title "title", its Tomatometer rating "tomatometer", and "mpaa" that is one of:
+;; - "G" 
+;; - "PG"
+;; - "PG-13"
+;; - "R"
+;; - "NC-17"
+;; which represents the MPAA rating of the movie.
+(define-struct Movie [title tomatometer mpaa])
+
+;; movie-template: Movie -> ?
+(define (movie-template m)
+  (... (Movie-title m) ...
+       (Movie-tomatometer m) ...
+       (Movie-mpaa m) ...))
+
+(define G "G") ;; Suitable for all age
+(define PG "PG") ;; Suitable for age >= 8
+(define PG-13 "PG-13") ;; Suitable for age >= 13
+(define R "R") ;; Suitable for age >= 17
+(define NC-17 "NC-17") ;; Suitable for age >= 18
+
+;; Examples 
+(define UP (make-Movie "UP" 98 PG))
+(define SAMARITAN (make-Movie "Samaritan" 40 PG-13))
+(define BARBARIAN (make-Movie "Barbarian" 91 R))
+(define MINIONS (make-Movie "Minions" 60 G))
+(define SHAME (make-Movie "Shame" 79 NC-17))
+
+
+;; appropriate-age: Movie -> Number
+;; Consumes Movie and outputs a number in which the audience with age
+;; greater than or equal to this number can watch the movie according to MPAA
+(define (appropriate-age Movie)
+  (cond
+    [(string=? (Movie-mpaa Movie) G) 0] 
+    [(string=? (Movie-mpaa Movie) PG) 8] 
+    [(string=? (Movie-mpaa Movie) PG-13) 13] 
+    [(string=? (Movie-mpaa Movie) R) 17] 
+    [(string=? (Movie-mpaa Movie) NC-17) 18]))
+
+(check-expect (appropriate-age UP) 8)
+(check-expect (appropriate-age SAMARITAN) 13)
+(check-expect (appropriate-age BARBARIAN) 17)
+(check-expect (appropriate-age MINIONS) 0)
+(check-expect (appropriate-age SHAME) 18)
+
+;; Age is a positive Number/integer
+;; can-and-will-watch?: Movie, Age -> Boolean
+;; Consumes Movie and determines whether the movie is
+;; age-appropriate and not Rotten (Tomatometer >= 60) 
+(define (can-and-will-watch? Movie Age)
+  (cond
+    [(and (>= Age (appropriate-age Movie)) (>= (Movie-tomatometer Movie) 60)) #true]
+    [else #false]))
+
+(check-expect (can-and-will-watch? UP 8) #true)
+(check-expect (can-and-will-watch? UP 7) #false)
+(check-expect (can-and-will-watch? SAMARITAN 21) #false)
+(check-expect (can-and-will-watch? SAMARITAN 7) #false)
+(check-expect (can-and-will-watch? BARBARIAN 17) #true)
+(check-expect (can-and-will-watch? BARBARIAN 16) #false)
+(check-expect (can-and-will-watch? MINIONS 1) #true)
+(check-expect (can-and-will-watch? SHAME 17) #false)
+(check-expect (can-and-will-watch? SHAME 18) #true)
+
+;; movie->image: Movie -> Image
+;; Consumes Movie and creates an image containing the title, Tomatometer, and MPAA rating
+(define (movie->image Movie)
+  (overlay/offset
+   (text/font "TOMATOMETER" 15 "black" "Gill Sans" 'swiss 'normal 'bold #f)
+   0 -40
+   (overlay
+(beside
+ (overlay/offset
+  ;; Rotten Tomato Logo
+  (text/font "FRESH" 10 "white" "Gill Sans" 'swiss 'normal 'bold #f)
+  0 -5
+  (overlay/offset (star 10 "solid" (color 15 146 70))
+                  0 13
+                  (overlay (overlay/offset (ellipse 40 35 "solid" (color 239 54 36))
+                                           0 -5
+                                           (ellipse 50 46 "solid" (color 253 216 3)))
+                           (ellipse 52 47 "solid" (color 245 110 40)))))
+ ;; Tomatometer
+ (text/font
+     (string-append " " (number->string (Movie-tomatometer Movie)) "%")
+     40 "black" "Gill Sans" 'swiss 'normal 'bold #f))
+    (overlay/offset
+     (beside
+      ;; MPAA rating
+      (overlay (text (Movie-mpaa Movie) 18 "black")
+               (rectangle (+ 20 (* 8 (string-length (Movie-mpaa Movie)))) 20 "outline" "black"))
+      ;; Title of the Movie
+      (text/font (string-append " " (Movie-title Movie)) 20 "black" "Gill Sans" 'swiss 'normal 'bold #f))
+     0 50
+     (rectangle 500 200 "solid" (color 243 243 243))))))
+
+(movie->image BARBARIAN)
+(movie->image MINIONS)
+(movie->image SHAME)
+(movie->image UP)
+(movie->image SAMARITAN)
+
