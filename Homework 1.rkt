@@ -41,11 +41,11 @@
        (world-pw w) ...
        (previous-words-template (world-prev w)) ...))
 
-(define LETTERS-1 (list "Y" "P" "T" "E" "N" "H" "O"))
-(define LETTERS-2 (list "A" "B" "C" "D" "F" "G" "I" "Y" "P" "T" "E" "N" "H" "O"))
-(define PREV-1 (list "POTY" "NNOEOP"))
-(define WORLD-1 (make-world LETTERS-1 "POT" '()))
-(define WORLD-2 (make-world LETTERS-2 "" PREV-1))
+(define letters-1 (list "Y" "P" "T" "E" "N" "H" "O"))
+(define letters-2 (list "A" "B" "C" "D" "F" "G" "I" "Y" "P" "T" "E" "N" "H" "O"))
+(define prev-1 (list "POTY" "NNOEOP"))
+(define world-1 (make-world letters-1 "POT" '()))
+(define world-2 (make-world letters-2 "" prev-1))
 
 ;; play : World -> World
 ;; Uses big-bang to play a game of Spelling Bee
@@ -64,13 +64,13 @@
                                 -30
                                 (rectangle 400 500 "solid" "white"))))
 
-(check-expect (world->image WORLD-1)
-              (beside (overlay (above (text (world-pw WORLD-1) 40 "black")
-                                      (letters->image (world-l WORLD-1)))
+(check-expect (world->image world-1)
+              (beside (overlay (above (text (world-pw world-1) 40 "black")
+                                      (letters->image (world-l world-1)))
                                (rectangle 400 500 "solid" "white"))
                       (overlay/align/offset "middle"
                                             "top"
-                                            (prev-list->image (world-prev WORLD-1))
+                                            (prev-list->image (world-prev world-1))
                                             0
                                             -30
                                             (rectangle 400 500 "solid" "white"))))
@@ -136,9 +136,9 @@
      (make-world (world-l w) "" (cons (world-pw w) (world-prev w)))]
     [else w]))
 
-(check-expect (key-pressed WORLD-1 "y") (make-world LETTERS-1 "POTY" '()))
-(check-expect (key-pressed WORLD-1 "z") (make-world LETTERS-1 "POT" '()))
-(check-expect (key-pressed WORLD-1 "\r") (make-world LETTERS-1 "" (cons "POT" '())))
+(check-expect (key-pressed world-1 "y") (make-world letters-1 "POTY" '()))
+(check-expect (key-pressed world-1 "z") (make-world letters-1 "POT" '()))
+(check-expect (key-pressed world-1 "\r") (make-world letters-1 "" (cons "POT" '())))
 
 ;; key-in-letters : Letters KeyEvent -> Boolean
 ;; Returns whether key in available letters
@@ -147,7 +147,7 @@
     [(empty? (rest l)) (string=? (first l) (string-upcase k))]
     [(cons? l) (or (string=? (first l) (string-upcase k)) (key-in-letters (rest l) k))]))
 
-(check-expect (key-in-letters LETTERS-1 "o") #true)
-(check-expect (key-in-letters LETTERS-1 "x") #false)
+(check-expect (key-in-letters letters-1 "o") #true)
+(check-expect (key-in-letters letters-1 "x") #false)
 
-(play WORLD-1)
+(play world-1)
