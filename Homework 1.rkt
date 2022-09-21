@@ -43,8 +43,9 @@
 
 (define LETTERS-1 (list "Y" "P" "T" "E" "N" "H" "O"))
 (define LETTERS-2 (list "A" "B" "C" "D" "F" "G" "I" "Y" "P" "T" "E" "N" "H" "O"))
+(define PREV-1 (list "POTY" "NNOEOP"))
 (define WORLD-1 (make-world LETTERS-1 "POT" '()))
-(define WORLD-2 (make-world LETTERS-2 "" '()))
+(define WORLD-2 (make-world LETTERS-2 "" PREV-1))
 
 ;; play : World -> World
 ;; Uses big-bang to play a game of Spelling Bee
